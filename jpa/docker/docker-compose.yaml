@@ -1,0 +1,62 @@
+version: '3'
+
+services:
+  mysql-dev:
+    image: mysql:5.7
+    container_name: spring-sandbox-jpa-mysql-dev
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: spring_sandbox_jpa_dev
+      MYSQL_USER: spring_sandbox_jpa
+      MYSQL_PASSWORD: password
+      TZ: 'Asia/Tokyo'
+    command: mysqld
+    volumes:
+      - ./my.dev.cnf:/etc/mysql/conf.d/my.cnf
+      - ./initdb.d:/docker-entrypoint-initdb.d
+      - spring-sandbox-jpa-mysql-dev:/var/lib/mysql
+    ports:
+      - 3002:3306
+    networks:
+      - db_network
+
+  mysql-test:
+    image: mysql:5.7
+    container_name: spring-sandbox-jpa-mysql-test
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: spring_sandbox_jpa_test
+      MYSQL_USER: spring_sandbox_jpa
+      MYSQL_PASSWORD: password
+      TZ: 'Asia/Tokyo'
+    command: mysqld
+    volumes:
+      - ./my.test.cnf:/etc/mysql/conf.d/my.cnf
+      - ./initdb.d:/docker-entrypoint-initdb.d
+      - spring-sandbox-jpa-mysql-test:/var/lib/mysql
+    ports:
+      - 3003:3307
+    networks:
+      - db_network
+
+  phpmyadmin:
+    container_name: phpmyadmin
+    image: phpmyadmin/phpmyadmin
+    environment:
+      - PMA_HOSTS=spring-sandbox-jpa-mysql-dev,spring-sandbox-jpa-mysql-test
+      - PMA_PORTS=3306,3307
+      - PMA_USER=spring_sandbox_jpa
+      - PMA_PASSWORD=password
+    ports:
+      - 3004:80
+    networks:
+      - db_network
+
+networks:
+  db_network:
+
+volumes:
+  spring-sandbox-jpa-mysql-dev:
+    driver: local
+  spring-sandbox-jpa-mysql-test:
+    driver: local
