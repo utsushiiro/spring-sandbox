@@ -3,6 +3,7 @@ package jp.utsushiiro.springsandbox.jpa.entity;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -58,10 +59,12 @@ public class Directory {
 
     /**
      * TODO mappedByを入れるとなにか挙動がかわるか調査
+     *
+     * Directory新規作成時等に子と一緒に作成をするために初期化しておく必要あり
      */
-    @OneToMany(fetch = FetchType.LAZY, cascade= CascadeType.ALL)
-    @JoinColumn(name = "parent_directory_id")
-    private List<Directory> children;
+    @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY, cascade= CascadeType.ALL)
+    // @JoinColumn(name = "parent_directory_id")
+    private List<Directory> children = new ArrayList<>();
 
     @Override
     public String toString() {
@@ -69,5 +72,15 @@ public class Directory {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 '}';
+    }
+
+    public void addSubDirectory(Directory directory) {
+        children.add(directory);
+        directory.setParent(this);
+    }
+
+    public void removeSubDirectory(Directory directory) {
+        children.add(directory);
+        directory.setParent(this);
     }
 }
