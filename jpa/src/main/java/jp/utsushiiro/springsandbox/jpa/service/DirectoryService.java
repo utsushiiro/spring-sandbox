@@ -34,7 +34,7 @@ public class DirectoryService {
     @Transactional
     public void setUp() {
         if (directoryRepository.findByName("root") != null) {
-            logger.warn("A root node already exist. Please drop table data.");
+            logger.info("A root node already exist. So set up processes skipped.");
             return;
         }
 
