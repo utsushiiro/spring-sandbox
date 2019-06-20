@@ -22,5 +22,6 @@ public class Sandbox implements CommandLineRunner {
     @Override
     public void run(String... args){
         directoryService.setUp();
+        directoryService.findByIdDemo();
     }
 }

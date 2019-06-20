@@ -22,7 +22,9 @@ public class DirectoryService {
     @Transactional
     public void findByIdDemo() {
         Directory node = directoryRepository.findById(1);
-        System.out.println(node.getChildren().get(0).getChildren());
+        System.out.println(node.getChildren());
+        System.out.println(node.getChildren().get(0).getChildren().get(0));
+        System.out.println(node.getChildren().get(0).getChildren().get(1));
     }
 
     @Transactional
