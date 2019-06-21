@@ -67,13 +67,8 @@ public class Directory {
     // @JoinColumn(name = "parent_directory_id")
     private List<Directory> children = new ArrayList<>();
 
-    @Override
-    public String toString() {
-        return "Directory{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                '}';
-    }
+    @OneToMany(mappedBy = "parentDirectory", cascade = CascadeType.ALL)
+    private List<File> files = new ArrayList<>();
 
     /**
      * JoinColumnを使わずにOneToManyのmappedByを使う場合に必要
@@ -89,5 +84,18 @@ public class Directory {
     public void removeSubDirectory(Directory directory) {
         children.add(directory);
         directory.setParent(this);
+    }
+
+    public void addFile(File file) {
+        files.add(file);
+        file.setParentDirectory(this);
+    }
+
+    @Override
+    public String toString() {
+        return "Directory{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
     }
 }

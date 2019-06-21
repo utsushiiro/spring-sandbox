@@ -1,6 +1,7 @@
 package jp.utsushiiro.springsandbox.jpa.service;
 
 import jp.utsushiiro.springsandbox.jpa.entity.Directory;
+import jp.utsushiiro.springsandbox.jpa.entity.File;
 import jp.utsushiiro.springsandbox.jpa.repository.DirectoryRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,9 +23,9 @@ public class DirectoryService {
     @Transactional
     public void findByIdDemo() {
         Directory node = directoryRepository.findById(1);
-        System.out.println(node.getChildren());
-        System.out.println(node.getChildren().get(0).getChildren().get(0));
-        System.out.println(node.getChildren().get(0).getChildren().get(1));
+        System.out.println(">> node.getChildren(): " + node.getChildren());
+        System.out.println(">> node.getChildren().get(0).getFiles(): " + node.getChildren().get(0).getFiles());
+        System.out.println(">> node.getChildren().get(0).getChildren().get(1): " +node.getChildren().get(0).getChildren().get(1));
     }
 
     @Transactional
@@ -43,8 +44,20 @@ public class DirectoryService {
         Directory node0 = new Directory();
         node0.setName("root");
 
+        File file0_in_0 = new File();
+        file0_in_0.setName("file0_in_0");
+        node0.addFile(file0_in_0);
+
         Directory node1_from_0 = new Directory();
         node1_from_0.setName("node1_from_0");
+
+        File file1_in_1 = new File();
+        file1_in_1.setName("file1_in_1");
+        node1_from_0.addFile(file1_in_1);
+
+        File file2_in_1 = new File();
+        file2_in_1.setName("file2_in_1");
+        node1_from_0.addFile(file2_in_1);
 
         Directory node2_from_0 = new Directory();
         node2_from_0.setName("node2_from_0");
