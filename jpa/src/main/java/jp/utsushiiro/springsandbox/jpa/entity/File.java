@@ -15,4 +15,8 @@ public class File {
 
     @Column(name="name")
     private String name;
+
+    @ManyToOne
+    @JoinColumn(name = "directory_id")
+    private Directory parentDirectory;
 }

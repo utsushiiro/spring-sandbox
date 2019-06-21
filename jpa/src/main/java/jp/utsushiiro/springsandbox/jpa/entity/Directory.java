@@ -3,6 +3,7 @@ package jp.utsushiiro.springsandbox.jpa.entity;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -57,11 +58,38 @@ public class Directory {
     private Directory parent;
 
     /**
-     * TODO mappedByを入れるとなにか挙動がかわるか調査
+     * Directory新規作成時等に子と一緒に作成をするために初期化しておく必要あり
+     *
+     * JoinColumnを使わずにOneToManyのmappedByを使ったほうが効率が良い
+     * @link https://vladmihalcea.com/the-best-way-to-map-a-onetomany-association-with-jpa-and-hibernate/
      */
-    @OneToMany(fetch = FetchType.LAZY, cascade= CascadeType.ALL)
-    @JoinColumn(name = "parent_directory_id")
-    private List<Directory> children;
+    @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY, cascade= CascadeType.ALL)
+    // @JoinColumn(name = "parent_directory_id")
+    private List<Directory> children = new ArrayList<>();
+
+    @OneToMany(mappedBy = "parentDirectory", cascade = CascadeType.ALL)
+    private List<File> files = new ArrayList<>();
+
+    /**
+     * JoinColumnを使わずにOneToManyのmappedByを使う場合に必要
+     */
+    public void addSubDirectory(Directory directory) {
+        children.add(directory);
+        directory.setParent(this);
+    }
+
+    /**
+     *　JoinColumnを使わずにOneToManyのmappedByを使う場合に必要
+     */
+    public void removeSubDirectory(Directory directory) {
+        children.add(directory);
+        directory.setParent(this);
+    }
+
+    public void addFile(File file) {
+        files.add(file);
+        file.setParentDirectory(this);
+    }
 
     @Override
     public String toString() {
